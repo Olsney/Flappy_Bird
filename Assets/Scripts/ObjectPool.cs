@@ -1,39 +1,38 @@
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
     [SerializeField] private Transform _container;
-    [SerializeField] private Pipe _prefab;
+    [SerializeField] private SpawnableObject _prefab;
 
-    private Queue<Pipe> _pool;
-
-    public IEnumerable<Pipe> PooledObjects => _pool;
-
+    private Queue<SpawnableObject> _pool;
+    
     private void Awake()
     {
-        _pool = new Queue<Pipe>();
+        _pool = new Queue<SpawnableObject>();
     }
 
-    public Pipe GetObject()
+    public SpawnableObject GetObject()
     {
         if (_pool.Count == 0)
         {
-            var pipe = Instantiate(_prefab);
-            pipe.transform.parent = _container;
-
-            return pipe;
+            var obj = Instantiate(_prefab);
+            obj.transform.parent = _container;
+    
+            return obj;
         }
-
+    
         return _pool.Dequeue();
     }
-
-    public void PutObject(Pipe pipe)
+    
+    public void PutObject(SpawnableObject obj)
     {
-        _pool.Enqueue(pipe);
-        pipe.gameObject.SetActive(false);
+        _pool.Enqueue(obj);
+        obj.gameObject.SetActive(false);
     }
-
+    
     public void Reset()
     {
         _pool.Clear();

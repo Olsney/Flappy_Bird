@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] private Bird _bird;
-    [SerializeField] private PipeGenerator _pipeGenerator;
+    [SerializeField] private Player _player;
     [SerializeField] private StartScreen _startScreen;
     [SerializeField] private EndGameScreen _endGameScreen;
 
@@ -12,14 +10,14 @@ public class Game : MonoBehaviour
     {
         _startScreen.PlayButtonClicked += OnPlayButtonClick;
         _endGameScreen.RestartButtonClicked += OnRestartButtonClick;
-        _bird.GameOver += OnGameOver;
+        _player.GameFinished += OnGameFinished;
     }
 
     private void OnDisable()
     {
         _startScreen.PlayButtonClicked -= OnPlayButtonClick;
         _endGameScreen.RestartButtonClicked -= OnRestartButtonClick;
-        _bird.GameOver -= OnGameOver;
+        _player.GameFinished -= OnGameFinished;
     }
 
     private void Start()
@@ -28,7 +26,7 @@ public class Game : MonoBehaviour
         _startScreen.Open();
     }
 
-    private void OnGameOver()
+    private void OnGameFinished()
     {
         Time.timeScale = 0;
         _endGameScreen.Open();
@@ -39,6 +37,7 @@ public class Game : MonoBehaviour
         _endGameScreen.Close();
         StartGame();
     }
+    
     private void OnPlayButtonClick()
     {
         _startScreen.Close();
@@ -48,6 +47,6 @@ public class Game : MonoBehaviour
     private void StartGame()
     {
         Time.timeScale = 1;
-        _bird.Reset();
+        _player.Reset();
     }
 }
